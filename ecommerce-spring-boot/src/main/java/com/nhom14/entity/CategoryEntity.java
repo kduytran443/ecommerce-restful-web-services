@@ -25,11 +25,55 @@ public class CategoryEntity {
 	@Column(columnDefinition = "nvarchar(128)")
 	private String name;
 
+	@Column(columnDefinition = "Text")
+	private String icon;
+
+	@Column(columnDefinition = "Text")
+	private String image;
+
+	@Column(columnDefinition = "nvarchar(512)")
+	private String description;
+
+	@Column(columnDefinition = "tinyint")
+	private Integer status;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
 	private List<SpecificationEntity> specification;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
 	private List<ProductEntity> products;
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public Long getId() {
 		return id;

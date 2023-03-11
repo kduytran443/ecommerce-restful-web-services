@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -39,6 +40,9 @@ public class ProductEntity {
 	@Column
 	private Integer price;
 
+	@Column(columnDefinition = "Text")
+	private String avatar;
+
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private CategoryEntity category;
@@ -60,8 +64,17 @@ public class ProductEntity {
 	@JoinColumn(name = "manufacturer_id")
 	private ManufacturerEntity manufacturer;
 
-	@ManyToMany(mappedBy = "products")
-	private List<DiscountEntity> discount;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "product_discount", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "discount_id"))
+	private List<DiscountEntity> discounts;
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
 
 	public Long getId() {
 		return id;
@@ -159,12 +172,12 @@ public class ProductEntity {
 		this.manufacturer = manufacturer;
 	}
 
-	public List<DiscountEntity> getDiscount() {
-		return discount;
+	public List<DiscountEntity> getDiscounts() {
+		return discounts;
 	}
 
-	public void setDiscount(List<DiscountEntity> discount) {
-		this.discount = discount;
+	public void setDiscounts(List<DiscountEntity> discounts) {
+		this.discounts = discounts;
 	}
 
 }

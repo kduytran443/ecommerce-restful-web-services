@@ -21,11 +21,11 @@ public class DiscountEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
-	private String code;
-
 	@Column(columnDefinition = "nvarchar(64)")
 	private String name;
+
+	@Column(columnDefinition = "tinyint")
+	private int discountPercent;
 
 	@Column
 	private Timestamp startTime;
@@ -33,11 +33,7 @@ public class DiscountEntity {
 	@Column
 	private Timestamp endTime;
 
-	@Column
-	private Integer percent;
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "product_discount", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "discount_id"))
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "discounts")
 	private List<ProductEntity> products;
 
 	public Long getId() {
@@ -46,14 +42,6 @@ public class DiscountEntity {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public String getName() {
@@ -80,12 +68,12 @@ public class DiscountEntity {
 		this.endTime = endTime;
 	}
 
-	public Integer getPercent() {
-		return percent;
+	public int getDiscountPercent() {
+		return discountPercent;
 	}
 
-	public void setPercent(Integer percent) {
-		this.percent = percent;
+	public void setDiscountPercent(int discountPercent) {
+		this.discountPercent = discountPercent;
 	}
 
 	public List<ProductEntity> getProducts() {
