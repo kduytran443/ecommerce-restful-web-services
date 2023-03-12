@@ -1,5 +1,7 @@
 package com.nhom14.entity;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,12 +23,34 @@ public class PaymentEntity {
 	@Column
 	private Long totalPrice;
 
+	@Column(columnDefinition = "nvarchar(64)")
+	private String numberAccount;
+
 	@ManyToOne
 	@JoinColumn(name = "payment_type_id")
 	private PaymentTypeEntity paymentType;
 
 	@OneToOne(mappedBy = "payment")
 	private OrderEntity order;
+
+	@Column
+	private Timestamp date;
+
+	public Timestamp getDate() {
+		return date;
+	}
+
+	public void setDate(Timestamp date) {
+		this.date = date;
+	}
+
+	public String getNumberAccount() {
+		return numberAccount;
+	}
+
+	public void setNumberAccount(String numberAccount) {
+		this.numberAccount = numberAccount;
+	}
 
 	public Long getId() {
 		return id;

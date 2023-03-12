@@ -26,15 +26,6 @@ public class AddressServiceImpl implements AddressService {
 	private AddressConverter addressConverter;
 
 	@Override
-	public List<AddressDTO> findAllByUsername(String username) {
-		UserEntity userEntity = userRepository.findOneByUsername(username);
-
-		List<AddressEntity> addressEntities = userEntity.getAddresses();
-
-		return addressConverter.toDTOList(addressEntities);
-	}
-
-	@Override
 	public List<AddressDTO> findAllByUserId(Long userId) {
 		UserEntity userEntity = userRepository.findOne(userId);
 

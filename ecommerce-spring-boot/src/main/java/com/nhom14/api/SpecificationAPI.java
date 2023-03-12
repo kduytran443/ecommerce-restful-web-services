@@ -41,7 +41,7 @@ public class SpecificationAPI {
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
 		}
-		return ResponseEntity.status(500).build();
+		return ResponseEntity.status(500).body(new SpecificationDTO());
 	}
 	
 	@PutMapping("/api/specification")
@@ -51,7 +51,7 @@ public class SpecificationAPI {
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
 		}
-		return ResponseEntity.status(500).build();
+		return ResponseEntity.status(500).body(new SpecificationDTO());
 	}
 
 	@DeleteMapping("/api/specification")

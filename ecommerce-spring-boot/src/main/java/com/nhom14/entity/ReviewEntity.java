@@ -37,6 +37,17 @@ public class ReviewEntity implements Serializable {
 	@Column(columnDefinition = "nvarchar(512)")
 	private String content;
 
+	@Column(columnDefinition = "tinyint")
+	private int rating;
+
+	public int getRating() {
+		return rating;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
 	public ReviewId getReviewId() {
 		return reviewId;
 	}

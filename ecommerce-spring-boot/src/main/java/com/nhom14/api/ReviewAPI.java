@@ -8,75 +8,66 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nhom14.annotation.CrossOriginsList;
-import com.nhom14.dto.AddressDTO;
+import com.nhom14.dto.ReviewDTO;
 import com.nhom14.entity.CustomUserDetails;
-import com.nhom14.service.AddressService;
+import com.nhom14.service.ReviewService;
 
 @RestController
-public class AddressAPI {
+public class ReviewAPI {
 	
 	@Autowired
-	private AddressService addressService;
+	private ReviewService reviewService;
 	
-	@GetMapping("/api/address")
+	@GetMapping("/public/api/review")
 	@CrossOriginsList
-	public ResponseEntity<List<AddressDTO>> getAddresses() {
-		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-				.getUser().getId();
-		
-		List<AddressDTO> dtos = addressService.findAllByUserId(userId);
-		
+	public ResponseEntity<List<ReviewDTO>> getReviewsByProductCode(@PathVariable("productCode") String productCode) {
+		List<ReviewDTO> dtos = reviewService.findAllByProductCode(productCode);
 		if (dtos != null) {
 			return ResponseEntity.status(200).body(dtos);
 		}
-
 		return ResponseEntity.status(200).body(Collections.emptyList());
 	}
-	
-	@PostMapping("/api/address")
+
+	@PostMapping("/api/review")
 	@CrossOriginsList
-	public ResponseEntity<AddressDTO> postProductSpecification(@RequestBody AddressDTO addressDTO) {
-		addressDTO.setId(null);
+	public ResponseEntity<ReviewDTO> postReview(@RequestBody ReviewDTO reviewDTO) {
 		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
 				.getUser().getId();
-		addressDTO.setUserId(userId);
+		reviewDTO.setUserId(userId);
 		
-		AddressDTO dto = addressService.save(addressDTO);
-
+		ReviewDTO dto = reviewService.save(reviewDTO);
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
 		}
-
-		return ResponseEntity.status(200).body(new AddressDTO());
+		return ResponseEntity.status(500).build();
 	}
-	
-	@PutMapping("/api/address")
+
+	@PutMapping("/api/review")
 	@CrossOriginsList
-	public ResponseEntity<AddressDTO> putProductSpecification(@RequestBody AddressDTO addressDTO) {
+	public ResponseEntity<ReviewDTO> putReview(@RequestBody ReviewDTO reviewDTO) {
 		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
 				.getUser().getId();
-		addressDTO.setUserId(userId);
-		AddressDTO dto = addressService.save(addressDTO);
-
+		reviewDTO.setUserId(userId);
+		
+		ReviewDTO dto = reviewService.save(reviewDTO);
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
 		}
-
-		return ResponseEntity.status(200).body(new AddressDTO());
+		return ResponseEntity.status(500).build();
 	}
-	
-	@DeleteMapping("/api/address")
-	@CrossOriginsList
-	public ResponseEntity<AddressDTO> deleteProductSpecification(@RequestBody AddressDTO addressDTO) {
-		addressService.delete(addressDTO);
 
-		return ResponseEntity.status(200).body(new AddressDTO());
+	@DeleteMapping("/api/review")
+	@CrossOriginsList
+	public ResponseEntity<ReviewDTO> deleteReview(@RequestBody ReviewDTO reviewDTO) {
+		reviewService.delete(reviewDTO);
+		return ResponseEntity.status(200).body(new ReviewDTO());
 	}
 	
 }

@@ -59,6 +59,17 @@ public class UserEntity {
 	@JoinTable(name = "favorite", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private List<ProductEntity> favoritedProducts;
 
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private List<OrderEntity> orders;
+
+	public List<OrderEntity> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<OrderEntity> orders) {
+		this.orders = orders;
+	}
+
 	public List<AddressEntity> getAddresses() {
 		return addresses;
 	}

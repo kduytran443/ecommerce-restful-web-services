@@ -34,6 +34,19 @@ public class ProductConverter
 
 		return entity;
 	}
+	public ProductEntity toEntity(ProductDTO dto, ProductEntity entity) {
+
+		entity.setAvatar(dto.getAvatar());
+		entity.setId(dto.getId());
+		entity.setName(dto.getName());
+		entity.setPrice(dto.getPrice());
+		if (dto.getStatus() != null)
+			entity.setStatus(dto.getStatus());
+		entity.setWarrantyMonth(dto.getWarrantyMonth());
+		entity.setYear(dto.getYear());
+
+		return entity;
+	}
 
 	@Override
 	public List<ProductEntity> toEntityList(List<ProductDTO> dtos) {
