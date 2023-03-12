@@ -28,13 +28,16 @@ public class ProductEntity {
 	@Column(columnDefinition = "nvarchar(256)")
 	private String name;
 
+	@Column(columnDefinition = "nvarchar(256)")
+	private String code;
+
 	@Column
 	private Integer year;
 
-	@Column
+	@Column(columnDefinition = "tinyint")
 	private Integer status;
 
-	@Column
+	@Column(columnDefinition = "tinyint")
 	private Integer warrantyMonth;
 
 	@Column
@@ -54,7 +57,7 @@ public class ProductEntity {
 	private List<UserEntity> users; // who favorites this product
 
 	@OneToMany(mappedBy = "product")
-	private List<ConsigmentEntity> consigments;
+	private List<ConsignmentEntity> consigments;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_info_id")
@@ -67,6 +70,14 @@ public class ProductEntity {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "product_discount", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "discount_id"))
 	private List<DiscountEntity> discounts;
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public String getAvatar() {
 		return avatar;
@@ -148,11 +159,11 @@ public class ProductEntity {
 		this.users = users;
 	}
 
-	public List<ConsigmentEntity> getConsigments() {
+	public List<ConsignmentEntity> getConsigments() {
 		return consigments;
 	}
 
-	public void setConsigments(List<ConsigmentEntity> consigments) {
+	public void setConsigments(List<ConsignmentEntity> consigments) {
 		this.consigments = consigments;
 	}
 

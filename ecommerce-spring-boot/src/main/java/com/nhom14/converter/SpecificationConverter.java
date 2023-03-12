@@ -17,6 +17,11 @@ public class SpecificationConverter implements IConverterToEntity<SpecificationE
 		entity.setName(dto.getName());
 		return entity;
 	}
+	
+	public SpecificationEntity toEntity(SpecificationDTO dto, SpecificationEntity entity) {
+		entity.setName(dto.getName());
+		return entity;
+	}
 
 	@Override
 	public List<SpecificationEntity> toEntityList(List<SpecificationDTO> dtos) {
@@ -29,7 +34,7 @@ public class SpecificationConverter implements IConverterToEntity<SpecificationE
 		SpecificationDTO dto = new SpecificationDTO();
 		if(entity.getId() != null) dto.setId(entity.getId());
 		dto.setName(entity.getName());
-		
+		if(entity.getCategory() != null) dto.setCategoryCode(entity.getCategory().getCode());
 		return dto;
 	}
 

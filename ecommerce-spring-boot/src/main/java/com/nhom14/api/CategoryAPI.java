@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nhom14.annotation.CrossOriginsList;
@@ -45,7 +46,7 @@ public class CategoryAPI {
 
 	@PostMapping("/api/category")
 	@CrossOriginsList
-	public ResponseEntity<?> postCategory(CategoryDTO categoryDTO) {
+	public ResponseEntity<?> postCategory(@RequestBody CategoryDTO categoryDTO) {
 		categoryDTO.setId(null);
 		CategoryDTO dto = categoryService.save(categoryDTO);
 		if (dto != null) {
@@ -56,7 +57,7 @@ public class CategoryAPI {
 
 	@PutMapping("/api/category")
 	@CrossOriginsList
-	public ResponseEntity<?> putCategory(CategoryDTO categoryDTO) {
+	public ResponseEntity<?> putCategory(@RequestBody CategoryDTO categoryDTO) {
 		CategoryDTO dto = categoryService.save(categoryDTO);
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
@@ -66,7 +67,7 @@ public class CategoryAPI {
 
 	@DeleteMapping("/api/category")
 	@CrossOriginsList
-	public ResponseEntity<?> deleteCategory(CategoryDTO categoryDTO) {
+	public ResponseEntity<?> deleteCategory(@RequestBody CategoryDTO categoryDTO) {
 		categoryService.delete(categoryDTO);
 		return ResponseEntity.status(200).build();
 	}

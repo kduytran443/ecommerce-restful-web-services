@@ -9,6 +9,7 @@ import com.nhom14.entity.CategoryEntity;
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
 	
 	List<CategoryEntity> findAllByStatus(int status);
+	
 	CategoryEntity findOneByCode(String code);
 	
 }

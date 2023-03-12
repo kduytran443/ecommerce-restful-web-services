@@ -3,6 +3,15 @@ package com.nhom14.dto;
 public class SpecificationDTO {
 	private Long id;
 	private String name;
+	private String categoryCode;
+
+	public String getCategoryCode() {
+		return categoryCode;
+	}
+
+	public void setCategoryCode(String categoryCode) {
+		this.categoryCode = categoryCode;
+	}
 
 	public Long getId() {
 		return id;
@@ -18,6 +27,11 @@ public class SpecificationDTO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "SpecificationDTO [id=" + id + ", name=" + name + ", categoryCode=" + categoryCode + "]";
 	}
 
 }

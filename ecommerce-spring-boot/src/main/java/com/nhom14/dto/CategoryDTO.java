@@ -66,4 +66,11 @@ public class CategoryDTO {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+
+	@Override
+	public String toString() {
+		return "CategoryDTO [id=" + id + ", name=" + name + ", icon=" + icon + ", code=" + code + ", description="
+				+ description + ", image=" + image + ", status=" + status + "]";
+	}
+
 }

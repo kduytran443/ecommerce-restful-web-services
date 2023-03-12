@@ -19,7 +19,7 @@ public class CategoryEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(columnDefinition = "char(128)")
+	@Column(columnDefinition = "varchar(128)")
 	private String code;
 
 	@Column(columnDefinition = "nvarchar(128)")
@@ -38,7 +38,7 @@ public class CategoryEntity {
 	private Integer status;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
-	private List<SpecificationEntity> specification;
+	private List<SpecificationEntity> specifications;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
 	private List<ProductEntity> products;
@@ -99,12 +99,12 @@ public class CategoryEntity {
 		this.name = name;
 	}
 
-	public List<SpecificationEntity> getSpecification() {
-		return specification;
+	public List<SpecificationEntity> getSpecifications() {
+		return specifications;
 	}
 
-	public void setSpecification(List<SpecificationEntity> specification) {
-		this.specification = specification;
+	public void setSpecifications(List<SpecificationEntity> specifications) {
+		this.specifications = specifications;
 	}
 
 	public List<ProductEntity> getProducts() {

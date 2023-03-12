@@ -31,6 +31,17 @@ public class AddressEntity {
 	@JoinColumn(name = "user_id")
 	private UserEntity user;
 
+	@Column(columnDefinition = "tinyint")
+	private int status;
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	public Long getId() {
 		return id;
 	}

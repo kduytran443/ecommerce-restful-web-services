@@ -21,7 +21,7 @@ public class SpecificationEntity {
 	private String name;
 
 	@ManyToOne
-	@JoinColumn(name = "category_id")
+	@JoinColumn(name = "category_id", nullable = true)
 	private CategoryEntity category;
 
 	public Long getId() {

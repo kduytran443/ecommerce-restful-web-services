@@ -28,7 +28,7 @@ public class ManufacturerEntity {
 	@Column(columnDefinition = "TEXT")
 	private String logo;
 
-	@Column(columnDefinition = "char(512)")
+	@Column(columnDefinition = "varchar(512)")
 	private String googleMap;
 
 	@Column(columnDefinition = "tinyint")

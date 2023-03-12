@@ -51,13 +51,29 @@ public class UserEntity {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private List<RoleEntity> roles;
-	
+
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<AddressEntity> addresses;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "favorite", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private List<ProductEntity> favoritedProducts;
+
+	public List<AddressEntity> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<AddressEntity> addresses) {
+		this.addresses = addresses;
+	}
+
+	public List<ProductEntity> getFavoritedProducts() {
+		return favoritedProducts;
+	}
+
+	public void setFavoritedProducts(List<ProductEntity> favoritedProducts) {
+		this.favoritedProducts = favoritedProducts;
+	}
 
 	public Long getId() {
 		return id;
