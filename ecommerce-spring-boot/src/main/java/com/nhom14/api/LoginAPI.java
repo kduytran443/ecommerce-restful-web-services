@@ -59,18 +59,6 @@ public class LoginAPI {
 		return userDTO;
 	}
 
-	@GetMapping("/api/user")
-	@CrossOriginsList
-	public ResponseEntity<?> getUserFromJWT() {
-		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-				.getUser().getId();
-		System.out.println("id " + userId);
-		UserDTO userDTO = userService.findOneById(userId);
-
-		System.out.println("/api/user userDTO " + userDTO);
-
-		return ResponseEntity.status(200).body(userDTO);
-	}
 
 	@PostMapping("/api/sign-up")
 	@CrossOriginsList

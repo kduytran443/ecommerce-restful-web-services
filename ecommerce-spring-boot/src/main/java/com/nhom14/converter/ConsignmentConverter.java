@@ -3,9 +3,12 @@ package com.nhom14.converter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.nhom14.dto.ConsignmentDTO;
 import com.nhom14.entity.ConsignmentEntity;
 
+@Component
 public class ConsignmentConverter implements IConverterToDTO<ConsignmentEntity, ConsignmentDTO>, IConverterToEntity<ConsignmentEntity, ConsignmentDTO> {
 
 	@Override

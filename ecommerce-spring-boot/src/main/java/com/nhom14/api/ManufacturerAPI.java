@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,18 @@ public class ManufacturerAPI {
 		dtos = manufacturerService.findAll();
 
 		return ResponseEntity.status(200).body(dtos);
+	}
+	
+	@GetMapping("/public/api/manufacturer/{productCode}")
+	@CrossOriginsList
+	public ResponseEntity<ManufacturerDTO> getManufacturerByProductCode(@PathVariable(name = "productCode") String productCode) {
+		ManufacturerDTO dto = manufacturerService.findOneByProductCode(productCode);
+		
+		if(dto != null) {
+			return ResponseEntity.status(200).body(dto);			
+		}
+		
+		return ResponseEntity.status(500).body(new ManufacturerDTO());
 	}
 	
 	@PostMapping("/api/manufacturer")

@@ -3,6 +3,7 @@ package com.nhom14.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nhom14.converter.ProductSpecificationConverter;
 import com.nhom14.dto.ProductSpecificationDTO;
@@ -15,6 +16,7 @@ import com.nhom14.repository.ProductSpecificationRepository;
 import com.nhom14.repository.SpecificationRepository;
 import com.nhom14.service.ProductSpecificationService;
 
+@Service
 public class ProductSpecificationServiceImpl implements ProductSpecificationService {
 
 	@Autowired
@@ -35,8 +37,10 @@ public class ProductSpecificationServiceImpl implements ProductSpecificationServ
 		ProductEntity productEntity = productRepository.findOneByCode(productCode);
 
 		if (productEntity != null) {
+			System.out.println("productCode "+productCode);
 			List<ProductSpecificationEntity> productSpecificationEntities = productSpecificationRepository
 					.findAllByProduct(productEntity);
+			System.out.println("productSpecificationEntities "+productSpecificationEntities.size());
 			return productSpecificationConverter.toDTOList(productSpecificationEntities);
 		}
 

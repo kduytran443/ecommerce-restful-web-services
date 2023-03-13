@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nhom14.converter.DiscountConverter;
 import com.nhom14.dto.DiscountDTO;
@@ -14,6 +15,7 @@ import com.nhom14.repository.DiscountRepository;
 import com.nhom14.repository.ProductRepository;
 import com.nhom14.service.DiscountService;
 
+@Service
 public class DiscountServiceImpl implements DiscountService {
 
 	@Autowired

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.nhom14.converter.AddressConverter;
 import com.nhom14.dto.AddressDTO;
@@ -13,7 +14,7 @@ import com.nhom14.repository.AddressRepository;
 import com.nhom14.repository.UserRepository;
 import com.nhom14.service.AddressService;
 
-@Component
+@Service
 public class AddressServiceImpl implements AddressService {
 
 	@Autowired
@@ -39,16 +40,21 @@ public class AddressServiceImpl implements AddressService {
 		AddressEntity addressEntity = null;
 
 		if (addressDTO.getId() != null) {
+			System.out.println("Sửa ");
 			addressEntity = addressRepository.findOne(addressDTO.getId());
+			System.out.println("addressEntity cũ: "+addressEntity.getDetails());
 			addressEntity = addressConverter.toEntity(addressDTO, addressEntity);
 		} else {
 			addressEntity = addressConverter.toEntity(addressDTO);
 			UserEntity userEntity = userRepository.findOne(addressDTO.getUserId());
 			addressEntity.setUser(userEntity);
+			addressEntity.setStatus(1);
 		}
 
 		if (addressEntity != null) {
+			System.out.println("Save ok!");
 			addressEntity = addressRepository.save(addressEntity);
+			return addressConverter.toDTO(addressEntity);
 		}
 
 		return null;

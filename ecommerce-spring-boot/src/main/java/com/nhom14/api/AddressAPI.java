@@ -62,8 +62,11 @@ public class AddressAPI {
 		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
 				.getUser().getId();
 		addressDTO.setUserId(userId);
+		
+		System.out.println("addressDTO "+addressDTO);
+		
 		AddressDTO dto = addressService.save(addressDTO);
-
+		
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
 		}

@@ -3,6 +3,7 @@ package com.nhom14.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nhom14.converter.ProductImageConverter;
 import com.nhom14.dto.ProductImageDTO;
@@ -12,6 +13,7 @@ import com.nhom14.repository.ProductImageRepository;
 import com.nhom14.repository.ProductRepository;
 import com.nhom14.service.ProductImageService;
 
+@Service
 public class ProductImageServiceImpl implements ProductImageService {
 
 	@Autowired

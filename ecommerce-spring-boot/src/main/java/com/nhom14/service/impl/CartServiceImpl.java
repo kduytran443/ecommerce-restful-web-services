@@ -83,10 +83,10 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public void delete(CartDTO cartDTO) {
 		UserEntity userEntity = userRepository.findOne(cartDTO.getUserId());
-		ProductEntity productEntity = productRepository.findOne(cartDTO.getProductId());
+		ProductEntity productEntity = productRepository.findOneByCode(cartDTO.getProductCode());
 
 		CartEntity cartEntity = cartRepository.findOneByUserAndProduct(userEntity, productEntity);
-		cartRepository.save(cartEntity);
+		cartRepository.delete(cartEntity);
 	}
 
 }

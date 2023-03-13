@@ -47,4 +47,10 @@ public class AddressDTO {
 		this.username = username;
 	}
 
+	@Override
+	public String toString() {
+		return "AddressDTO [id=" + id + ", details=" + details + ", username=" + username + ", userId=" + userId
+				+ ", status=" + status + "]";
+	}
+
 }

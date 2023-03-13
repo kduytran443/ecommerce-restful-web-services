@@ -31,7 +31,8 @@ public class ProductConverter
 			entity.setStatus(dto.getStatus());
 		entity.setWarrantyMonth(dto.getWarrantyMonth());
 		entity.setYear(dto.getYear());
-
+		entity.setCode(dto.getCode());
+		
 		return entity;
 	}
 	public ProductEntity toEntity(ProductDTO dto, ProductEntity entity) {
@@ -57,7 +58,7 @@ public class ProductConverter
 	public ProductDTO toDTO(ProductEntity entity) {
 		ProductDTO dto = new ProductDTO();
 
-		dto.setAvatar(entity.getAvatar());
+		if(entity.getAvatar()!= null) dto.setAvatar(entity.getAvatar());
 		if (entity.getCategory() != null) {
 			dto.setCategoryCode(entity.getCategory().getCode());
 			dto.setCategoryName(entity.getCategory().getName());
@@ -76,6 +77,7 @@ public class ProductConverter
 		dto.setStatus(entity.getStatus());
 		dto.setWarrantyMonth(entity.getWarrantyMonth());
 		dto.setYear(entity.getYear());
+		dto.setCode(entity.getCode());
 		return dto;
 	}
 

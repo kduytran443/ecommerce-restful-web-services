@@ -3,9 +3,26 @@ package com.nhom14.dto;
 public class CartDTO {
 	private Long userId;
 	private String username;
+	private ProductDTO product;
+	private int quantity;
 	private String productCode;
 	private Long productId;
-	private int quantity;
+
+	public String getProductCode() {
+		return productCode;
+	}
+
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
 
 	public Long getUserId() {
 		return userId;
@@ -23,20 +40,12 @@ public class CartDTO {
 		this.username = username;
 	}
 
-	public String getProductCode() {
-		return productCode;
+	public ProductDTO getProduct() {
+		return product;
 	}
 
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
-	}
-
-	public Long getProductId() {
-		return productId;
-	}
-
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public void setProduct(ProductDTO product) {
+		this.product = product;
 	}
 
 	public int getQuantity() {

@@ -1,6 +1,7 @@
 package com.nhom14.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.nhom14.converter.ProductInfoConverter;
 import com.nhom14.dto.ProductInfoDTO;
@@ -10,6 +11,7 @@ import com.nhom14.repository.ProductInfoRepository;
 import com.nhom14.repository.ProductRepository;
 import com.nhom14.service.ProductInfoService;
 
+@Service
 public class ProductInfoServiceImpl implements ProductInfoService {
 
 	@Autowired

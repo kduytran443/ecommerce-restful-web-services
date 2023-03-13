@@ -3,6 +3,7 @@ package com.nhom14.converter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nhom14.dto.CartDTO;
@@ -11,12 +12,16 @@ import com.nhom14.entity.CartEntity;
 @Component
 public class CartConverter implements IConverterToDTO<CartEntity, CartDTO>, IConverterToEntity<CartEntity, CartDTO> {
 
+	@Autowired
+	private ProductConverter productConverter;
+	
 	@Override
 	public CartDTO toDTO(CartEntity entity) {
 		CartDTO dto = new CartDTO();
 		
 		dto.setProductCode(entity.getProduct().getCode());
 		dto.setProductId(entity.getProduct().getId());
+		dto.setProduct(productConverter.toDTO(entity.getProduct()));
 		dto.setQuantity(entity.getQuantity());
 		dto.setUserId(entity.getUser().getId());
 		dto.setUsername(entity.getUser().getUsername());

@@ -26,6 +26,7 @@ public class ProductSpecificationAPI {
 	@GetMapping("/public/api/product-specification/{productCode}")
 	@CrossOriginsList
 	public ResponseEntity<List<ProductSpecificationDTO>> getProductSpecification(@PathVariable("productCode") String productCode) {
+		System.out.println("??? "+productCode);
 		List<ProductSpecificationDTO> dtos = productSpecificationService.findAllByProductCode(productCode);
 
 		if (dtos != null) {

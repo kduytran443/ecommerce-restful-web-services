@@ -8,6 +8,7 @@ public interface ManufacturerService {
 	
 	List<ManufacturerDTO> findAll();
 	ManufacturerDTO findOneByCode(String code);
+	ManufacturerDTO findOneByProductCode(String code);
 	ManufacturerDTO save(ManufacturerDTO manufacturerDTO);
 	void delete(ManufacturerDTO manufacturerDTO);
 	
