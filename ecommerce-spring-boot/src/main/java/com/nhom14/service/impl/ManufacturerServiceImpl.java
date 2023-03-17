@@ -61,8 +61,7 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 	public void delete(ManufacturerDTO manufacturerDTO) {
 		ManufacturerEntity manufacturerEntity = manufacturerRepository.findOneByCode(manufacturerDTO.getCode());
 		if (manufacturerEntity != null) {
-			manufacturerEntity.setStatus(0);
-			manufacturerRepository.save(manufacturerEntity);
+			manufacturerRepository.delete(manufacturerEntity);
 		}
 	}
 

@@ -8,6 +8,7 @@ import com.nhom14.dto.ProductDTO;
 
 public interface ProductService {
 	List<ProductDTO> findAllByCategoryCode(String code, Pageable pageable);
+	List<ProductDTO> findAll();
 	List<ProductDTO> findAllByManufacturerCode(String code, Pageable pageable);
 	ProductDTO findOneByCode(String code);
 	int countByCategoryCode(String code);
@@ -15,4 +16,7 @@ public interface ProductService {
 	Long countAll();
 	ProductDTO save(ProductDTO productDTO);
 	void delete(ProductDTO productDTO);
+	List<ProductDTO> searchByName(String name);
+	List<ProductDTO> getAllProductDetails();
+	List<ProductDTO> getAllProductDetailsByName(String name);
 }

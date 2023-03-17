@@ -43,6 +43,8 @@ public class OrderDetailsConverter implements IConverterToDTO<OrderDetailsEntity
 		dto.setProductCode(entity.getProduct().getCode());
 		dto.setProductId(entity.getProduct().getId());
 		dto.setQuantity(entity.getQuantity());
+		dto.setProductAvatar(entity.getProduct().getAvatar());
+		dto.setProductName(entity.getProduct().getName());
 		return dto;
 	}
 

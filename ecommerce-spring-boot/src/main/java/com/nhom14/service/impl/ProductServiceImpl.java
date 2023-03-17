@@ -1,5 +1,6 @@
 package com.nhom14.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -10,16 +11,18 @@ import org.springframework.stereotype.Service;
 
 import com.nhom14.converter.ProductConverter;
 import com.nhom14.converter.ProductImageConverter;
-import com.nhom14.converter.ProductInfoConverter;
 import com.nhom14.dto.ProductDTO;
 import com.nhom14.dto.ProductImageDTO;
 import com.nhom14.entity.CategoryEntity;
+import com.nhom14.entity.ConsignmentEntity;
 import com.nhom14.entity.ManufacturerEntity;
+import com.nhom14.entity.OrderDetailsEntity;
 import com.nhom14.entity.ProductEntity;
 import com.nhom14.entity.ProductImageEntity;
-import com.nhom14.entity.ProductInfoEntity;
+import com.nhom14.entity.UserEntity;
 import com.nhom14.repository.CategoryRepository;
 import com.nhom14.repository.ManufacturerRepository;
+import com.nhom14.repository.OrderDetailsRepository;
 import com.nhom14.repository.ProductRepository;
 import com.nhom14.service.ProductService;
 
@@ -40,9 +43,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductImageConverter productImageConverter;
-
+	
 	@Autowired
-	private ProductInfoConverter productInfoConverter;
+	private OrderDetailsRepository orderDetailsRepository;
 
 	@Override
 	public List<ProductDTO> findAllByCategoryCode(String code, Pageable pageable) {
@@ -123,11 +126,6 @@ public class ProductServiceImpl implements ProductService {
 
 				productEntity.setProductImages(productImageEntities);
 			}
-
-			if (productDTO.getProductInfo() != null) {
-				ProductInfoEntity productInfoEntity = productInfoConverter.toEntity(productDTO.getProductInfo());
-				productEntity.setProductInfo(productInfoEntity);
-			}
 		}
 		
 		if(productEntity != null) {			
@@ -140,14 +138,105 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void delete(ProductDTO productDTO) {
-		ProductEntity productEntity = productRepository.findOne(productDTO.getId());
-		productEntity.setStatus(0);
-		productEntity = productRepository.save(productEntity);
+		ProductEntity productEntity = null;
+		if(productDTO.getId() != null) {
+			productEntity = productRepository.findOne(productDTO.getId());
+		}
+		
+		if(productEntity == null) {
+			productEntity = productRepository.findOneByCode(productDTO.getCode());
+		}
+		
+		productRepository.delete(productEntity);
 	}
 
 	@Override
 	public ProductDTO findOneByCode(String code) {
 		return productConverter.toDTO(productRepository.findOneByCode(code));
+	}
+
+	@Override
+	public List<ProductDTO> findAll() {
+		return productConverter.toDTOList(productRepository.findAll());
+	}
+
+	@Override
+	public List<ProductDTO> searchByName(String name) {
+		System.out.println("Search "+name);
+		List<ProductEntity> list = productRepository.findByNameContainingIgnoreCase(name);
+		
+		return productConverter.toDTOList(list);
+	}
+
+	@Override
+	public List<ProductDTO> getAllProductDetails() {
+		
+		List<ProductEntity> productEntities = productRepository.findByOrderByIdDesc();
+		List<ProductDTO> productDTOs = new ArrayList<>();
+		for (ProductEntity productEntity : productEntities) {
+			int stock = 0;
+			Long revenue = 0L;
+			Long like = 0L;
+			
+			List<UserEntity> entities = productEntity.getUsers();
+			if(entities != null) like = entities.size() + 0L;
+			
+			List<ConsignmentEntity> consignmentEntities = productEntity.getConsigments();
+			for (ConsignmentEntity consignmentEntity : consignmentEntities) {
+				stock += consignmentEntity.getQuantity();
+				revenue -= consignmentEntity.getPrice() * consignmentEntity.getQuantity();
+			}
+			
+			List<OrderDetailsEntity> orderDetailsEntities = orderDetailsRepository.findAllByProduct(productEntity);
+			for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntities) {
+				revenue += orderDetailsEntity.getQuantity() * (orderDetailsEntity.getPrice() - orderDetailsEntity.getPrice() * orderDetailsEntity.getDiscountPercent());
+				stock -= orderDetailsEntity.getQuantity();
+			}
+			
+			ProductDTO productDTO = productConverter.toDTO(productEntity);
+			productDTO.setStock(stock);
+			productDTO.setRevenue(revenue);
+			productDTO.setFavorited(like);
+			
+			productDTOs.add(productDTO);
+		}
+		
+		return productDTOs;
+	}
+
+	@Override
+	public List<ProductDTO> getAllProductDetailsByName(String name) {
+		List<ProductEntity> productEntities = productRepository.findByNameContainingIgnoreCase(name);
+		List<ProductDTO> productDTOs = new ArrayList<>();
+		for (ProductEntity productEntity : productEntities) {
+			int stock = 0;
+			Long revenue = 0L;
+			Long like = 0L;
+			
+			List<UserEntity> entities = productEntity.getUsers();
+			if(entities != null) like = entities.size() + 0L;
+			
+			List<ConsignmentEntity> consignmentEntities = productEntity.getConsigments();
+			for (ConsignmentEntity consignmentEntity : consignmentEntities) {
+				stock += consignmentEntity.getQuantity();
+				revenue -= consignmentEntity.getPrice() * consignmentEntity.getQuantity();
+			}
+			
+			List<OrderDetailsEntity> orderDetailsEntities = orderDetailsRepository.findAllByProduct(productEntity);
+			for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntities) {
+				revenue += orderDetailsEntity.getQuantity() * (orderDetailsEntity.getPrice() - orderDetailsEntity.getPrice() * orderDetailsEntity.getDiscountPercent());
+				stock -= orderDetailsEntity.getQuantity();
+			}
+			
+			ProductDTO productDTO = productConverter.toDTO(productEntity);
+			productDTO.setStock(stock);
+			productDTO.setRevenue(revenue);
+			productDTO.setFavorited(like);
+			
+			productDTOs.add(productDTO);
+		}
+		
+		return productDTOs;
 	}
 
 }

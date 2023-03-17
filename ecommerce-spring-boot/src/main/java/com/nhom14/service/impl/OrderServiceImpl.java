@@ -1,6 +1,7 @@
 package com.nhom14.service.impl;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +40,13 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<OrderDTO> findAllByOrderByIdDesc() {
-		// TODO Auto-generated method stub
+		
+		List<OrderEntity> orderEntities = orderRepository.findAllByOrderByIdDesc();
+		
+		if(orderEntities != null) {
+			return orderConverter.toDTOList(orderEntities);
+		}
+		
 		return null;
 	}
 
@@ -66,16 +73,30 @@ public class OrderServiceImpl implements OrderService {
 				orderEntity.setPayment(paymentEntity);
 			}
 		} else {
+			
+			System.out.println("***Order: "+orderDTO);
+			
 			orderEntity = orderConverter.toEntity(orderDTO);
 			AddressEntity addressEntity = addressRepository.findOne(orderDTO.getAddress().getId());
 			orderEntity.setAddress(addressEntity);
-			PaymentEntity paymentEntity = paymentRepository.findOne(orderDTO.getPayment().getId());
-			orderEntity.setPayment(paymentEntity);
+			if(orderDTO.getPayment() != null) {
+				PaymentEntity paymentEntity = paymentRepository.findOne(orderDTO.getPayment().getId());
+				orderEntity.setPayment(paymentEntity);
+			}
 			UserEntity userEntity = userRepository.findOne(orderDTO.getUserId());
 			orderEntity.setUser(userEntity);
 
 			Date date = new Date();
 			orderEntity.setDate(new Timestamp(date.getTime()));
+
+			Calendar c = Calendar.getInstance();
+			c.setTime(date);
+			c.add(Calendar.DATE, 2);
+			Date currentDatePlusOne = c.getTime();
+
+			orderEntity.setExpectedTime(new Timestamp(currentDatePlusOne.getTime()));
+			orderEntity.setStatus(1);
+			orderEntity.setDeliveryFee(5);
 		}
 
 		if (orderEntity != null) {
@@ -94,6 +115,20 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public OrderDTO findOneById(Long id) {
 		return orderConverter.toDTO(orderRepository.findOne(id));
+	}
+
+	@Override
+	public OrderDTO updateStatus(Long orderId, int status) {
+
+		OrderEntity orderEntity = orderRepository.findOne(orderId);
+		
+		if(orderEntity != null) {
+			orderEntity.setStatus(status);
+			orderEntity = orderRepository.save(orderEntity);
+			return orderConverter.toDTO(orderEntity);
+		}
+		
+		return null;
 	}
 
 }

@@ -7,6 +7,24 @@ public class OrderDetailsDTO {
 	private Long orderId;
 	private Long productId;
 	private String productCode;
+	private String productName;
+	private String productAvatar;
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getProductAvatar() {
+		return productAvatar;
+	}
+
+	public void setProductAvatar(String productAvatar) {
+		this.productAvatar = productAvatar;
+	}
 
 	public Integer getQuantity() {
 		return quantity;

@@ -10,5 +10,6 @@ public interface ConsignmentService {
 	List<ConsignmentDTO> findAllByProductCode(String productCode);
 	ConsignmentDTO save(ConsignmentDTO consignmentDTO);
 	void delete(ConsignmentDTO consignmentDTO);
+	ConsignmentDTO findOneById(Long id);
 	
 }

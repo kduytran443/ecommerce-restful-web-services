@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nhom14.annotation.CrossOriginsList;
@@ -29,6 +30,18 @@ public class OrderAPI {
 	@CrossOriginsList
 	public ResponseEntity<List<OrderDTO>> getOrders() {
 		List<OrderDTO> dtos = orderService.findAllByOrderByIdDesc();
+		if (dtos != null) {
+			return ResponseEntity.status(200).body(dtos);
+		}
+		return ResponseEntity.status(200).body(Collections.emptyList());
+	}
+	
+	@GetMapping("/api/order/user")
+	@CrossOriginsList
+	public ResponseEntity<List<OrderDTO>> getOrdersByUserId() {
+		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+				.getUser().getId();
+		List<OrderDTO> dtos = orderService.findAllByUserId(userId);
 		if (dtos != null) {
 			return ResponseEntity.status(200).body(dtos);
 		}
@@ -54,6 +67,17 @@ public class OrderAPI {
 		orderDTO.setUserId(userId);
 		
 		OrderDTO dto = orderService.save(orderDTO);
+		if (dto != null) {
+			return ResponseEntity.status(200).body(dto);
+		}
+		return ResponseEntity.status(500).body(new OrderDTO());
+	}
+	
+	@PutMapping("/api/order/{orderId}")
+	@CrossOriginsList
+	public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable("orderId") Long orderId, @RequestParam(name = "status") int status) {
+		
+		OrderDTO dto = orderService.updateStatus(orderId, status);
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
 		}

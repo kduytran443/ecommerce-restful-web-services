@@ -20,6 +20,24 @@ public class ProductDTO {
 	private ProductInfoDTO productInfo;
 	private ManufacturerDTO manufacturer;
 	private List<DiscountDTO> discounts;
+	private String content;
+	private Long revenue;
+
+	public Long getRevenue() {
+		return revenue;
+	}
+
+	public void setRevenue(Long revenue) {
+		this.revenue = revenue;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
 
 	public List<ProductSpecificationDTO> getProductSpecifications() {
 		return productSpecifications;

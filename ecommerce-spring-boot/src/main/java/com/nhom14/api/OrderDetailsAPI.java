@@ -23,9 +23,19 @@ public class OrderDetailsAPI {
 	@Autowired
 	private OrderDetailsService orderDetailsService;
 
-	@GetMapping("/api/order-details/{productCode}")
+	@GetMapping("/api/order-details/{orderId}")
 	@CrossOriginsList
-	public ResponseEntity<List<OrderDetailsDTO>> getOrderDetails(@PathVariable("productCode") String productCode) {
+	public ResponseEntity<List<OrderDetailsDTO>> getOrderDetailsByOrderId(@PathVariable("orderId") Long orderId) {
+		List<OrderDetailsDTO> dtos = orderDetailsService.findAllByOrderId(orderId);
+		if (dtos != null) {
+			return ResponseEntity.status(200).body(dtos);
+		}
+		return ResponseEntity.status(200).body(Collections.emptyList());
+	}
+
+	@GetMapping("/api/order-details/product/{productCode}")
+	@CrossOriginsList
+	public ResponseEntity<List<OrderDetailsDTO>> getOrderDetailsByProductCode(@PathVariable("productCode") String productCode) {
 		List<OrderDetailsDTO> dtos = orderDetailsService.findAllByProductCode(productCode);
 		if (dtos != null) {
 			return ResponseEntity.status(200).body(dtos);

@@ -1,5 +1,7 @@
 package com.nhom14.service.impl;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,28 +45,38 @@ public class ConsignmentServiceImpl implements ConsignmentService {
 
 	@Override
 	public ConsignmentDTO save(ConsignmentDTO consignmentDTO) {
-
 		ConsignmentEntity consignmentEntity = null;
-
+		
 		if (consignmentDTO.getId() != null) { // edit
 			consignmentEntity = consignmentRepository.findOne(consignmentDTO.getId());
 			consignmentEntity = consignmentConverter.toEntity(consignmentDTO, consignmentEntity);
 			// Còn thiếu thống kê hàng đã bán do chưa có làm phần order
 		} else { // add new
 			consignmentEntity = consignmentConverter.toEntity(consignmentDTO);
+			ProductEntity productEntity = productRepository.findOne(consignmentDTO.getProductId());
+			consignmentEntity.setProduct(productEntity);
 		}
-
+		
 		if (consignmentEntity != null) {
+			Date date = new Date();
+			consignmentEntity.setDate(new Timestamp(date.getTime()));
 			consignmentEntity = consignmentRepository.save(consignmentEntity);
 			return consignmentConverter.toDTO(consignmentEntity);
 		}
-
+		
 		return null;
 	}
 
 	@Override
 	public void delete(ConsignmentDTO consignmentDTO) {
 		consignmentRepository.delete(consignmentDTO.getId());
+	}
+
+	@Override
+	public ConsignmentDTO findOneById(Long id) {
+		ConsignmentEntity consignmentEntity = consignmentRepository.findOne(id);
+		
+		return consignmentConverter.toDTO(consignmentEntity);
 	}
 
 }

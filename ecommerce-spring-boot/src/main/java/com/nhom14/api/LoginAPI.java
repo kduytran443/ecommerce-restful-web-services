@@ -59,12 +59,10 @@ public class LoginAPI {
 		return userDTO;
 	}
 
-
 	@PostMapping("/api/sign-up")
 	@CrossOriginsList
 	public UserDTO signUp(@RequestBody UserDTO userDTO) {
-
-		System.out.println(userDTO);
+		
 		return userService.signUp(userDTO);
 	}
 
@@ -74,5 +72,5 @@ public class LoginAPI {
 		SecurityContextHolder.clearContext();
 		return new MessageDTO("Logout successfully!");
 	}
-	
+
 }

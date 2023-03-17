@@ -13,6 +13,15 @@ public class OrderDTO {
 	private PaymentDTO payment;
 	private Long userId;
 	private String username;
+	private String transaction;
+
+	public String getTransaction() {
+		return transaction;
+	}
+
+	public void setTransaction(String transaction) {
+		this.transaction = transaction;
+	}
 
 	public Long getUserId() {
 		return userId;
@@ -92,6 +101,13 @@ public class OrderDTO {
 
 	public void setPayment(PaymentDTO payment) {
 		this.payment = payment;
+	}
+
+	@Override
+	public String toString() {
+		return "OrderDTO [id=" + id + ", date=" + date + ", deliveryFee=" + deliveryFee + ", expectedTime="
+				+ expectedTime + ", note=" + note + ", status=" + status + ", address=" + address + ", payment="
+				+ payment + ", userId=" + userId + ", username=" + username + "]";
 	}
 
 }

@@ -38,7 +38,7 @@ public class ProductImageAPI {
 	@CrossOriginsList
 	public ResponseEntity<ProductImageDTO> postProductImage(@RequestBody ProductImageDTO productImageDTO) {
 		ProductImageDTO dto = productImageService.save(productImageDTO);
-
+		System.out.println("productImageDTO "+productImageDTO.getProductCode());
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
 		}

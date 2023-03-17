@@ -1,5 +1,6 @@
 package com.nhom14.api;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,15 +58,64 @@ public class ProductAPI {
 
 		return ResponseEntity.status(200).body(new PageableDTO<>());
 	}
-	
-	@GetMapping("/api/product/{productCode}")
+
+	@GetMapping("/public/api/product/search/{name}")
 	@CrossOriginsList
-	public ResponseEntity<ProductDTO> postProduct(@PathVariable("productCode") String productCode) {
+	public ResponseEntity<List<ProductDTO>> getProductsByName(@PathVariable("name") String name) {
+
+		List<ProductDTO> dtos = productService.searchByName(name);
+
+		if (dtos != null) {
+			return ResponseEntity.status(200).body(dtos);
+		}
+
+		return ResponseEntity.status(200).body(Collections.emptyList());
+	}
+	
+	@GetMapping("/public/api/product/details")
+	@CrossOriginsList
+	public ResponseEntity<List<ProductDTO>> getProductsDetails() {
+
+		List<ProductDTO> dtos = productService.getAllProductDetails();
+
+		if (dtos != null) {
+			return ResponseEntity.status(200).body(dtos);
+		}
+
+		return ResponseEntity.status(200).body(Collections.emptyList());
+	}
+	
+	@GetMapping("/public/api/product/details/{name}")
+	@CrossOriginsList
+	public ResponseEntity<List<ProductDTO>> getProductsDetailsByName(@PathVariable("name") String name) {
+
+		List<ProductDTO> dtos = productService.getAllProductDetailsByName(name);
+
+		if (dtos != null) {
+			return ResponseEntity.status(200).body(dtos);
+		}
+
+		return ResponseEntity.status(200).body(Collections.emptyList());
+	}
+	
+	@GetMapping("/public/api/product/{productCode}")
+	@CrossOriginsList
+	public ResponseEntity<ProductDTO> getProduct(@PathVariable("productCode") String productCode) {
 		ProductDTO dto = productService.findOneByCode(productCode);
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
 		}
 		return ResponseEntity.status(500).body(new ProductDTO());
+	}
+	
+	@GetMapping("/public/api/product/all")
+	@CrossOriginsList
+	public ResponseEntity<List<ProductDTO>> getAllProduct() {
+		List<ProductDTO> dtos = productService.findAll();
+		if (dtos != null) {
+			return ResponseEntity.status(200).body(dtos);
+		}
+		return ResponseEntity.status(500).body(Collections.emptyList());
 	}
 	
 	@PostMapping("/api/product")

@@ -61,7 +61,6 @@ public class UserService implements UserDetailsService {
     	//Adding USER role code for register
     	List<RoleEntity> roles = new ArrayList<RoleEntity>();
     	roles.add(roleRepository.findOneByCode("USER"));
-    	
     	userEntity.setRoles(roles);
     	
     	//Make sure id of new user is empty

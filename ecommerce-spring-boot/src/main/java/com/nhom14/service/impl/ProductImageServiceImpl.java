@@ -41,11 +41,10 @@ public class ProductImageServiceImpl implements ProductImageService {
 
 		if (productImageDTO.getId() == null) {
 			ProductImageEntity entity = productImageConverter.toEntity(productImageDTO);
-			entity = productImageRepository.save(entity);
 
 			ProductEntity productEntity = productRepository.findOneByCode(productImageDTO.getProductCode());
-
 			entity.setProduct(productEntity);
+			entity = productImageRepository.save(entity);
 			return productImageConverter.toDTO(entity);
 		}
 

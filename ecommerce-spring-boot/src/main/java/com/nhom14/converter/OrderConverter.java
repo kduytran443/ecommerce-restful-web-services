@@ -56,7 +56,7 @@ public class OrderConverter
 		dto.setExpectedTime(entity.getExpectedTime());
 		dto.setId(entity.getId());
 		dto.setNote(entity.getNote());
-		dto.setPayment(paymentConverter.toDTO(entity.getPayment()));
+		if(entity.getPayment() != null) dto.setPayment(paymentConverter.toDTO(entity.getPayment()));
 		dto.setStatus(entity.getStatus());
 		dto.setUserId(entity.getUser().getId());
 		dto.setUsername(entity.getUser().getUsername());

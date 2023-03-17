@@ -10,6 +10,15 @@ public class PaymentDTO {
 	private String paymentTypeName;
 	private Long orderId;
 	private Timestamp date;
+	private String transaction;
+
+	public String getTransaction() {
+		return transaction;
+	}
+
+	public void setTransaction(String transaction) {
+		this.transaction = transaction;
+	}
 
 	public Long getId() {
 		return id;
@@ -65,6 +74,13 @@ public class PaymentDTO {
 
 	public void setDate(Timestamp date) {
 		this.date = date;
+	}
+
+	@Override
+	public String toString() {
+		return "PaymentDTO [id=" + id + ", totalPrice=" + totalPrice + ", numberAccount=" + numberAccount
+				+ ", paymentTypeId=" + paymentTypeId + ", paymentTypeName=" + paymentTypeName + ", orderId=" + orderId
+				+ ", date=" + date + ", transaction=" + transaction + "]";
 	}
 
 }

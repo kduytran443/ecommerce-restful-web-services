@@ -13,4 +13,7 @@ public interface OrderService {
 	OrderDTO save(OrderDTO orderDTO);
 
 	void delete(OrderDTO orderDTO);
+	
+	OrderDTO updateStatus(Long orderId, int status);
+	
 }

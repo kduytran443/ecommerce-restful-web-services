@@ -45,6 +45,18 @@ public class ManufacturerAPI {
 		return ResponseEntity.status(500).body(new ManufacturerDTO());
 	}
 	
+	@GetMapping("/public/api/manufacturer/code/{code}")
+	@CrossOriginsList
+	public ResponseEntity<ManufacturerDTO> getManufacturerByCode(@PathVariable(name = "code") String code) {
+		ManufacturerDTO dto = manufacturerService.findOneByCode(code);
+		
+		if(dto != null) {
+			return ResponseEntity.status(200).body(dto);			
+		}
+		
+		return ResponseEntity.status(500).body(new ManufacturerDTO());
+	}
+	
 	@PostMapping("/api/manufacturer")
 	@CrossOriginsList
 	public ResponseEntity<ManufacturerDTO> postManufacturer(@RequestBody ManufacturerDTO manufacturerDTO) {

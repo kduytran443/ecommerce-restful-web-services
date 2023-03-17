@@ -19,6 +19,7 @@ public class PaymentConverter implements IConverterToDTO<PaymentEntity, PaymentD
 		entity.setId(dto.getId());
 		entity.setNumberAccount(dto.getNumberAccount());
 		entity.setTotalPrice(dto.getTotalPrice());
+		entity.setPaymentTransaction(dto.getTransaction());
 		
 		return entity;
 	}
@@ -28,6 +29,7 @@ public class PaymentConverter implements IConverterToDTO<PaymentEntity, PaymentD
 		entity.setId(dto.getId());
 		entity.setNumberAccount(dto.getNumberAccount());
 		entity.setTotalPrice(dto.getTotalPrice());
+		entity.setPaymentTransaction(dto.getTransaction());
 		
 		return entity;
 	}
@@ -45,8 +47,11 @@ public class PaymentConverter implements IConverterToDTO<PaymentEntity, PaymentD
 		dto.setId(entity.getId());
 		dto.setNumberAccount(entity.getNumberAccount());
 		dto.setTotalPrice(entity.getTotalPrice());
-		dto.setPaymentTypeId(entity.getPaymentType().getId());
-		dto.setPaymentTypeName(entity.getPaymentType().getName());
+		if(entity.getPaymentType()!=null) {
+			dto.setPaymentTypeId(entity.getPaymentType().getId());
+			dto.setPaymentTypeName(entity.getPaymentType().getName());
+		}
+		dto.setTransaction(entity.getPaymentTransaction());
 		
 		return dto;
 	}

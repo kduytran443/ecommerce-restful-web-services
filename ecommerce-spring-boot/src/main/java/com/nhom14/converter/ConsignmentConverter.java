@@ -40,10 +40,13 @@ public class ConsignmentConverter implements IConverterToDTO<ConsignmentEntity, 
 		dto.setDate(entity.getDate());
 		dto.setId(entity.getId());
 		dto.setPrice(entity.getPrice());
-		dto.setProductCode(entity.getProduct().getCode());
-		dto.setProductId(entity.getProduct().getId());
-		dto.setProductImage(entity.getProduct().getAvatar());
-		dto.setProductName(entity.getProduct().getName());
+		if(entity.getProduct() != null) {
+			dto.setProductCode(entity.getProduct().getCode());
+			dto.setProductId(entity.getProduct().getId());
+			dto.setProductImage(entity.getProduct().getAvatar());
+			dto.setProductName(entity.getProduct().getName());
+		}
+		
 		dto.setQuantity(entity.getQuantity());
 		
 		return dto;

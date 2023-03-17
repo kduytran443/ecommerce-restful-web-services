@@ -26,6 +26,9 @@ public class PaymentEntity {
 	@Column(columnDefinition = "nvarchar(64)")
 	private String numberAccount;
 
+	@Column(columnDefinition = "nvarchar(320)")
+	private String paymentTransaction;
+
 	@ManyToOne
 	@JoinColumn(name = "payment_type_id")
 	private PaymentTypeEntity paymentType;
@@ -35,6 +38,14 @@ public class PaymentEntity {
 
 	@Column
 	private Timestamp date;
+
+	public String getPaymentTransaction() {
+		return paymentTransaction;
+	}
+
+	public void setPaymentTransaction(String paymentTransaction) {
+		this.paymentTransaction = paymentTransaction;
+	}
 
 	public Timestamp getDate() {
 		return date;

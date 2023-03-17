@@ -14,7 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -25,10 +24,10 @@ public class ProductEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(columnDefinition = "nvarchar(256)")
+	@Column(columnDefinition = "nvarchar(256)", unique = true)
 	private String name;
 
-	@Column(columnDefinition = "nvarchar(256)")
+	@Column(columnDefinition = "nvarchar(256)", unique = true)
 	private String code;
 
 	@Column
@@ -46,6 +45,9 @@ public class ProductEntity {
 	@Column(columnDefinition = "Text")
 	private String avatar;
 
+	@Column(columnDefinition = "NText")
+	private String content;
+
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private CategoryEntity category;
@@ -59,10 +61,6 @@ public class ProductEntity {
 	@OneToMany(mappedBy = "product")
 	private List<ConsignmentEntity> consigments;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "product_info_id")
-	private ProductInfoEntity productInfo;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "manufacturer_id")
 	private ManufacturerEntity manufacturer;
@@ -70,6 +68,17 @@ public class ProductEntity {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "product_discount", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "discount_id"))
 	private List<DiscountEntity> discounts;
+	
+	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "product")
+	private List<ProductSpecificationEntity> productSpecifications;
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
 
 	public String getCode() {
 		return code;
@@ -165,14 +174,6 @@ public class ProductEntity {
 
 	public void setConsigments(List<ConsignmentEntity> consigments) {
 		this.consigments = consigments;
-	}
-
-	public ProductInfoEntity getProductInfo() {
-		return productInfo;
-	}
-
-	public void setProductInfo(ProductInfoEntity productInfo) {
-		this.productInfo = productInfo;
 	}
 
 	public ManufacturerEntity getManufacturer() {
