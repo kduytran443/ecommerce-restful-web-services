@@ -1,9 +1,14 @@
 package com.nhom14.api;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nhom14.annotation.CrossOriginsList;
@@ -23,6 +28,26 @@ public class UserAPI {
 		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
 				.getUser().getId();
 		UserDTO dto = userService.findOneById(userId);
+		if (dto != null) {
+			return ResponseEntity.status(200).body(dto);
+		}
+		return ResponseEntity.status(500).body(new UserDTO());
+	}
+	
+	@GetMapping("/api/user/all")
+	@CrossOriginsList
+	public ResponseEntity<List<UserDTO>> getAllUser() {
+		List<UserDTO> dtos = userService.findAll();
+		if (dtos != null) {
+			return ResponseEntity.status(200).body(dtos);
+		}
+		return ResponseEntity.status(500).body(Collections.emptyList());
+	}
+	
+	@DeleteMapping("/api/user")
+	@CrossOriginsList
+	public ResponseEntity<UserDTO> deleteUser(@RequestBody UserDTO userDTO) {
+		UserDTO dto = userService.delete(userDTO);
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
 		}

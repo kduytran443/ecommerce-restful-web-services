@@ -22,6 +22,7 @@ public class ProductDTO {
 	private List<DiscountDTO> discounts;
 	private String content;
 	private Long revenue;
+	private Integer isFavorited;
 
 	public Long getRevenue() {
 		return revenue;

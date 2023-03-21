@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nhom14.annotation.CrossOriginsList;
 import com.nhom14.dto.PageableDTO;
 import com.nhom14.dto.ProductDTO;
+import com.nhom14.entity.CustomUserDetails;
 import com.nhom14.service.ProductService;
 
 @RestController
@@ -29,22 +31,22 @@ public class ProductAPI {
 
 	@GetMapping("/public/api/product")
 	@CrossOriginsList
-	public ResponseEntity<PageableDTO<ProductDTO>> getProductsByCategoryCode(@RequestParam(defaultValue = "0") Integer pageNo,
-			@RequestParam(defaultValue = "8") Integer pageSize, @RequestParam(defaultValue = "id") String sortBy,
+	public ResponseEntity<PageableDTO<ProductDTO>> getProductsByCategoryCode(
+			@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "8") Integer pageSize,
+			@RequestParam(defaultValue = "id") String sortBy,
 			@RequestParam(name = "categoryCode", required = false) String categoryCode,
 			@RequestParam(name = "manufacturerCode", required = false) String manufacturerCode) {
 
 		List<ProductDTO> dtos = null;
 		Pageable paging = new PageRequest(pageNo, pageSize);
 		PageableDTO<ProductDTO> pageableDTO = new PageableDTO<>();
-		
-		if(categoryCode != null) {
+
+		if (categoryCode != null) {
 			dtos = productService.findAllByCategoryCode(categoryCode, paging);
 			pageableDTO.setData(dtos);
 			pageableDTO.setPageable(paging);
 			pageableDTO.setCountAll(productService.countByCategoryCode(categoryCode));
-		}
-		else {
+		} else {
 			dtos = productService.findAllByManufacturerCode(manufacturerCode, paging);
 			pageableDTO = new PageableDTO<>();
 			pageableDTO.setData(dtos);
@@ -71,7 +73,7 @@ public class ProductAPI {
 
 		return ResponseEntity.status(200).body(Collections.emptyList());
 	}
-	
+
 	@GetMapping("/public/api/product/details")
 	@CrossOriginsList
 	public ResponseEntity<List<ProductDTO>> getProductsDetails() {
@@ -84,7 +86,7 @@ public class ProductAPI {
 
 		return ResponseEntity.status(200).body(Collections.emptyList());
 	}
-	
+
 	@GetMapping("/public/api/product/details/{name}")
 	@CrossOriginsList
 	public ResponseEntity<List<ProductDTO>> getProductsDetailsByName(@PathVariable("name") String name) {
@@ -97,7 +99,7 @@ public class ProductAPI {
 
 		return ResponseEntity.status(200).body(Collections.emptyList());
 	}
-	
+
 	@GetMapping("/public/api/product/{productCode}")
 	@CrossOriginsList
 	public ResponseEntity<ProductDTO> getProduct(@PathVariable("productCode") String productCode) {
@@ -107,7 +109,7 @@ public class ProductAPI {
 		}
 		return ResponseEntity.status(500).body(new ProductDTO());
 	}
-	
+
 	@GetMapping("/public/api/product/all")
 	@CrossOriginsList
 	public ResponseEntity<List<ProductDTO>> getAllProduct() {
@@ -117,7 +119,7 @@ public class ProductAPI {
 		}
 		return ResponseEntity.status(500).body(Collections.emptyList());
 	}
-	
+
 	@PostMapping("/api/product")
 	@CrossOriginsList
 	public ResponseEntity<ProductDTO> postProduct(@RequestBody ProductDTO productDTO) {
@@ -128,7 +130,7 @@ public class ProductAPI {
 		}
 		return ResponseEntity.status(500).body(new ProductDTO());
 	}
-	
+
 	@PutMapping("/api/product")
 	@CrossOriginsList
 	public ResponseEntity<ProductDTO> putProduct(@RequestBody ProductDTO productDTO) {
@@ -138,11 +140,44 @@ public class ProductAPI {
 		}
 		return ResponseEntity.status(500).body(new ProductDTO());
 	}
-	
+
 	@DeleteMapping("/api/product")
 	@CrossOriginsList
 	public ResponseEntity<ProductDTO> deleteProduct(@RequestBody ProductDTO productDTO) {
 		productService.delete(productDTO);
 		return ResponseEntity.status(200).body(new ProductDTO());
 	}
+
+	@GetMapping("/api/product/favorite/{productCode}")
+	@CrossOriginsList
+	public ResponseEntity<?> getFavoriteByUserAndProductCode(@PathVariable("productCode") String productCode) {
+		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+				.getUser().getId();
+
+		boolean isFavoried = productService.checkFavorited(productCode, userId);
+
+		return ResponseEntity.status(200).body(isFavoried);
+	}
+
+	@PostMapping("/api/product/favorite/{productCode}")
+	@CrossOriginsList
+	public ResponseEntity<ProductDTO> favoriteProduct(@PathVariable("productCode") String productCode) {
+		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+				.getUser().getId();
+		productService.favorite(productCode, userId);
+		return ResponseEntity.status(200).body(new ProductDTO());
+	}
+
+	@GetMapping("/api/product/favorite")
+	@CrossOriginsList
+	public ResponseEntity<List<ProductDTO>> getFavoriteByUser() {
+		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+				.getUser().getId();
+		List<ProductDTO> dtos = productService.getAllProductFavoritedByUser(userId);;
+		if (dtos != null) {
+			return ResponseEntity.status(200).body(dtos);
+		}
+		return ResponseEntity.status(500).body(Collections.emptyList());
+	}
+
 }

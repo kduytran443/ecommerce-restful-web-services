@@ -31,9 +31,6 @@ public class UserEntity {
 	private String fullname;
 
 	@Column
-	private String email;
-
-	@Column
 	private int phoneNumber;
 
 	@Column
@@ -42,7 +39,7 @@ public class UserEntity {
 	@Column
 	private int brithYear;
 
-	@Column
+	@Column(columnDefinition = "text")
 	private String avatar;
 
 	@Column(columnDefinition = "tinyint")
@@ -116,14 +113,6 @@ public class UserEntity {
 
 	public void setFullname(String fullname) {
 		this.fullname = fullname;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public int getPhoneNumber() {

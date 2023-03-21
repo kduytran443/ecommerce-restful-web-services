@@ -12,6 +12,15 @@ public class UserDTO {
 	private String role;
 	private String avatar;
 	private String jwt;
+	private Integer status;
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
 	public String getJwt() {
 		return jwt;

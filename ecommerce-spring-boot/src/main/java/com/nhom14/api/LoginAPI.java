@@ -66,6 +66,13 @@ public class LoginAPI {
 		return userService.signUp(userDTO);
 	}
 
+	@PostMapping("/api/sign-up/admin")
+	@CrossOriginsList
+	public UserDTO signUpAdmin(@RequestBody UserDTO userDTO) {
+		
+		return userService.signUpAdmin(userDTO);
+	}
+
 	@PostMapping("/api/logout")
 	@CrossOriginsList
 	public MessageDTO logout() throws ServletException {

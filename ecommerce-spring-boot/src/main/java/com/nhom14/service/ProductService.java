@@ -19,4 +19,7 @@ public interface ProductService {
 	List<ProductDTO> searchByName(String name);
 	List<ProductDTO> getAllProductDetails();
 	List<ProductDTO> getAllProductDetailsByName(String name);
+	List<ProductDTO> getAllProductFavoritedByUser(Long userId);
+	boolean checkFavorited(String productCode, Long userId);
+	void favorite(String productCode, Long userId);
 }
