@@ -279,7 +279,7 @@ public class ProductServiceImpl implements ProductService {
 				stock += consignmentEntity.getQuantity();
 				revenue -= consignmentEntity.getPrice() * consignmentEntity.getQuantity();
 			}
-
+			//
 			List<OrderDetailsEntity> orderDetailsEntities = orderDetailsRepository.findAllByProduct(productEntity);
 			for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntities) {
 				revenue += orderDetailsEntity.getQuantity() * (orderDetailsEntity.getPrice()
