@@ -1,6 +1,7 @@
 package com.nhom14.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,8 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 
 	@Override
 	public List<ManufacturerDTO> findAll() {
-		return manufacturerConverter.toDTOList(manufacturerRepository.findAll());
+		return manufacturerConverter.toDTOList(manufacturerRepository.findAll().stream()
+				.filter(item -> item.getStatus() == 1).collect(Collectors.toList()));
 	}
 
 	@Override
@@ -43,13 +45,28 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 	public ManufacturerDTO save(ManufacturerDTO manufacturerDTO) {
 		ManufacturerEntity manufacturerEntity = null;
 		if (manufacturerDTO.getId() != null) {
-			manufacturerEntity = manufacturerRepository.findOneByCode(manufacturerDTO.getCode());
+			manufacturerEntity = manufacturerRepository.findOne(manufacturerDTO.getId());
+			
+			ManufacturerEntity checkManufacturerEntity = manufacturerRepository.findOneByCode(manufacturerDTO.getCode());
+			if(!checkManufacturerEntity.getId().equals(manufacturerEntity.getId())) {
+				throw new RuntimeException("Mã code đã tồn tại");
+			}
+			
 			manufacturerEntity = manufacturerConverter.toEntity(manufacturerDTO, manufacturerEntity);
 		} else {
+			ManufacturerEntity checkManufacturerEntity = manufacturerRepository.findOneByCode(manufacturerDTO.getCode());
+			
+			if(checkManufacturerEntity != null) {
+				throw new RuntimeException("Mã code đã tồn tại");
+			}
+			
 			manufacturerEntity = manufacturerConverter.toEntity(manufacturerDTO);
+			manufacturerEntity.setStatus(1);
 		}
 
 		if (manufacturerEntity != null) {
+			
+			
 			manufacturerEntity = manufacturerRepository.save(manufacturerEntity);
 			return manufacturerConverter.toDTO(manufacturerEntity);
 		}
@@ -61,7 +78,8 @@ public class ManufacturerServiceImpl implements ManufacturerService {
 	public void delete(ManufacturerDTO manufacturerDTO) {
 		ManufacturerEntity manufacturerEntity = manufacturerRepository.findOneByCode(manufacturerDTO.getCode());
 		if (manufacturerEntity != null) {
-			manufacturerRepository.delete(manufacturerEntity);
+			manufacturerEntity.setStatus(0);
+			manufacturerRepository.save(manufacturerEntity);
 		}
 	}
 

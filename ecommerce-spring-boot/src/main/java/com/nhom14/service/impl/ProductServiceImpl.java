@@ -115,8 +115,15 @@ public class ProductServiceImpl implements ProductService {
 		ProductEntity productEntity = null;
 		if (productDTO.getId() != null) {
 			productEntity = productRepository.findOne(productDTO.getId());
-
+			
 			productEntity = productConverter.toEntity(productDTO, productEntity);
+			
+			/*
+			List<ProductImageDTO> productImageDTOs = productDTO.getProductImages();
+
+			List<ProductImageEntity> productImageEntities = productImageConverter.toEntityList(productImageDTOs);
+
+			productEntity.setProductImages(productImageEntities);*/
 		} else {
 			productEntity = productConverter.toEntity(productDTO);
 
@@ -129,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
 						.findOne(productDTO.getManufacturer().getId());
 				productEntity.setManufacturer(manufacturerEntity);
 			}
-
+			productEntity.setStatus(1);
 			if (productDTO.getProductImages() != null) {
 				List<ProductImageDTO> productImageDTOs = productDTO.getProductImages();
 
@@ -152,18 +159,30 @@ public class ProductServiceImpl implements ProductService {
 		ProductEntity productEntity = null;
 		if (productDTO.getId() != null) {
 			productEntity = productRepository.findOne(productDTO.getId());
+			productEntity.setStatus(0);
+			productRepository.save(productEntity);
 		}
-
-		if (productEntity == null) {
-			productEntity = productRepository.findOneByCode(productDTO.getCode());
-		}
-
-		productRepository.delete(productEntity);
 	}
 
 	@Override
 	public ProductDTO findOneByCode(String code) {
-		return productConverter.toDTO(productRepository.findOneByCode(code));
+		ProductEntity productEntity = productRepository.findOneByCode(code);
+		ProductDTO productDTO = productConverter.toDTO(productEntity);
+		
+		Integer stock = 0;
+		List<ConsignmentEntity> consignmentEntities = productEntity.getConsigments();
+		for (ConsignmentEntity consignmentEntity : consignmentEntities) {
+			stock += consignmentEntity.getQuantity();
+		}
+		
+		List<OrderDetailsEntity> orderDetailsEntities = orderDetailsRepository.findAllByProduct(productEntity);
+		for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntities) {
+			stock -= orderDetailsEntity.getQuantity();
+		}
+		
+		productDTO.setRemainingAmount(stock);
+		
+		return productDTO;
 	}
 
 	@Override
@@ -173,7 +192,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductDTO> searchByName(String name) {
-		System.out.println("Search " + name);
 		List<ProductEntity> list = productRepository.findByNameContainingIgnoreCase(name);
 
 		return productConverter.toDTOList(list);
@@ -198,7 +216,6 @@ public class ProductServiceImpl implements ProductService {
 				stock += consignmentEntity.getQuantity();
 				revenue -= consignmentEntity.getPrice() * consignmentEntity.getQuantity();
 			}
-			System.out.println("revenue bef "+revenue);
 
 			/*
 			List<OrderDetailsEntity> orderDetailsEntities = orderDetailsRepository.findAllByProduct(productEntity);
@@ -209,11 +226,17 @@ public class ProductServiceImpl implements ProductService {
 			}
 			*/
 			
+			System.out.println("Before "+revenue);
 			List<OrderDetailsEntity> orderDetailsEntities = orderDetailsRepository.findAllByProduct(productEntity);
 			for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntities) {
 				stock -= orderDetailsEntity.getQuantity();
+				revenue += orderDetailsEntity.getQuantity() * (orderDetailsEntity.getPrice()
+						- orderDetailsEntity.getPrice() * (orderDetailsEntity.getDiscountPercent())/100);
+				System.out.println();
+				System.out.println("After "+revenue);
 			}
 			
+			/*
 			Map<Long, List<OrderDetailsEntity>> orderMap =
 					orderDetailsEntities.stream().collect(Collectors.groupingBy(entity -> entity.getOrder().getId()));
 			Set<Long> keys = orderMap.keySet();
@@ -223,7 +246,9 @@ public class ProductServiceImpl implements ProductService {
 					revenue += entity.getPayment().getTotalPrice();
 				}
 			}
-			System.out.println("revenue af "+revenue);
+			*/
+			
+			
 			
 			ProductDTO productDTO = productConverter.toDTO(productEntity);
 			productDTO.setStock(stock);
@@ -287,8 +312,6 @@ public class ProductServiceImpl implements ProductService {
 		UserEntity userEntity = userRepository.findOne(userId);
 		ProductEntity productEntity = productRepository.findOneByCode(productCode);
 
-		System.out.println(productEntity.getName() + " --- " + userEntity.getUsername());
-
 		if (userEntity.getFavoritedProducts() != null && userEntity.getFavoritedProducts().contains(productEntity)) {
 
 			return true;
@@ -306,11 +329,9 @@ public class ProductServiceImpl implements ProductService {
 		List<ProductEntity> filterList = productEntities.stream().filter(entity -> entity.getCode().toLowerCase().equals(productCode.toLowerCase())).collect(Collectors.toList());
 		
 		if(filterList != null && filterList.size() != 0) {
-			System.out.println("Console "+filterList.size() + " : "+productEntities.size());
 			for (ProductEntity entity : filterList) {
 				productEntities.remove(entity);
 			}
-			System.out.println("End "+filterList.size() + " : "+productEntities.size());
 		}
 		else {
 			productEntities.add(productEntity);

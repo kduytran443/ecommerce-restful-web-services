@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public @interface CrossOriginsList {
 	
 	public String[] origins() default  {
-        "http://localhost:3003", "http://192.168.1.4:3003"
+        "http://localhost:3003", "http://192.168.1.2:3003"
 	};
 	
 }

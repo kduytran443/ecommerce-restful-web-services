@@ -37,14 +37,14 @@ public class ProductConverter
 	}
 	public ProductEntity toEntity(ProductDTO dto, ProductEntity entity) {
 
-		entity.setAvatar(dto.getAvatar());
-		entity.setId(dto.getId());
-		entity.setName(dto.getName());
-		entity.setPrice(dto.getPrice());
+		if(dto.getAvatar() != null) entity.setAvatar(dto.getAvatar());
+		if(dto.getId() != null) entity.setId(dto.getId());
+		if(dto.getName() != null) entity.setName(dto.getName());
+		if(dto.getPrice() != null) entity.setPrice(dto.getPrice());
 		if (dto.getStatus() != null)
 			entity.setStatus(dto.getStatus());
-		entity.setWarrantyMonth(dto.getWarrantyMonth());
-		entity.setYear(dto.getYear());
+		if(dto.getWarrantyMonth() != null) entity.setWarrantyMonth(dto.getWarrantyMonth());
+		if(dto.getYear() != null) entity.setYear(dto.getYear());
 
 		return entity;
 	}

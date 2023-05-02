@@ -33,6 +33,12 @@ public class CategoryServiceImpl implements CategoryService{
 			categoryEntity = categoryConverter.toEntity(categoryDTO, categoryEntity);
 		} else {
 			categoryEntity = new CategoryEntity();
+			
+			CategoryEntity checkCategory = categoryRepository.findOneByCode(categoryDTO.getCode());
+			if(checkCategory != null) {
+				throw new RuntimeException("Mã code đã tồn tại");
+			}
+			
 			categoryEntity = categoryConverter.toEntity(categoryDTO);
 		}
 		
@@ -44,6 +50,7 @@ public class CategoryServiceImpl implements CategoryService{
 	@Override
 	public void delete(CategoryDTO categoryDTO) {
 		CategoryEntity categoryEntity = categoryRepository.findOne(categoryDTO.getId());
+		categoryEntity.setStatus(0);
 		categoryEntity = categoryRepository.save(categoryEntity);
 	}
 

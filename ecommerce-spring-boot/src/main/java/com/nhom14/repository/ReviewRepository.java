@@ -9,7 +9,7 @@ import com.nhom14.entity.ReviewEntity;
 import com.nhom14.entity.UserEntity;
 
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long>{
-	List<ReviewEntity> findAllByProduct(ProductEntity product);
+	List<ReviewEntity> findAllByProductOrderByDateDesc(ProductEntity product);
 	List<ReviewEntity> findAllByUser(UserEntity user);
 	ReviewEntity findOneByProductAndUser(ProductEntity product, UserEntity user);
 }

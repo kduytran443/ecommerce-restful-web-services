@@ -1,5 +1,6 @@
 package com.nhom14.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class DiscountServiceImpl implements DiscountService {
 
 		ProductEntity productEntity = productRepository.findOneByCode(productCode);
 		if (productEntity != null) {
-			List<DiscountEntity> discountEntities = productEntity.getDiscounts();
+			List<DiscountEntity> discountEntities = productEntity.getDiscounts().stream().filter(item -> item.getStatus() == 1).collect(Collectors.toList());
 			return discountConverter.toDTOList(discountEntities);
 		}
 
@@ -67,13 +68,21 @@ public class DiscountServiceImpl implements DiscountService {
 		} else {
 			discountEntity = discountConverter.toEntity(discountDTO);
 		}
+		
+		if(discountEntity != null) {
+			discountEntity.setStatus(1);
+			discountEntity = discountRepository.save(discountEntity);
+			return discountConverter.toDTO(discountEntity);
+		}
 
 		return null;
 	}
 
 	@Override
 	public void delete(DiscountDTO discountDTO) {
-		discountRepository.delete(discountDTO.getId());
+		DiscountEntity discountEntity = discountRepository.findOne(discountDTO.getId());
+		discountEntity.setStatus(0);
+		discountEntity = discountRepository.save(discountEntity);
 	}
 
 	@Override
@@ -84,6 +93,56 @@ public class DiscountServiceImpl implements DiscountService {
 				.filter(discount -> discount.getEndTime().getTime() > date.getTime()).collect(Collectors.toList());
 		
 		return discountConverter.toDTOList(discountEntities);
+	}
+
+	@Override
+	public DiscountDTO apply(DiscountDTO discountDTO, String productCode) {
+		DiscountEntity discountEntity = discountRepository.findOne(discountDTO.getId());
+		ProductEntity productEntity = productRepository.findOneByCode(productCode);
+		
+		List<DiscountEntity> discountEntities = productEntity.getDiscounts();
+		
+		boolean existed = false;
+		for (DiscountEntity entity : discountEntities) {
+			if(entity.getId().equals(discountEntity.getId())) {
+				existed = true;
+				break;
+			}
+		}
+		
+		if(!existed) {
+			discountEntities.add(discountEntity);
+			productRepository.save(productEntity);
+			return discountConverter.toDTO(discountEntity);
+		}
+		
+		return null;
+	}
+
+	@Override
+	public DiscountDTO remove(DiscountDTO discountDTO, String productCode) {
+		DiscountEntity discountEntity = discountRepository.findOne(discountDTO.getId());
+		ProductEntity productEntity = productRepository.findOneByCode(productCode);
+		
+		List<DiscountEntity> discountEntities = productEntity.getDiscounts();
+		
+		List<DiscountEntity> removeDiscounts = new ArrayList<>();
+		for (DiscountEntity entity : discountEntities) {
+			if(entity.getId().equals(discountEntity.getId())) {
+				removeDiscounts.add(entity);
+				break;
+			}
+		}
+		
+		if(removeDiscounts != null) {
+			for (DiscountEntity entity : removeDiscounts) {
+				discountEntities.remove(entity);
+			}
+			productRepository.save(productEntity);
+			return discountConverter.toDTO(discountEntity);
+		}
+		
+		return null;
 	}
 
 }

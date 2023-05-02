@@ -25,7 +25,7 @@ public class ReviewAPI {
 	@Autowired
 	private ReviewService reviewService;
 	
-	@GetMapping("/public/api/review")
+	@GetMapping("/public/api/review/{productCode}")
 	@CrossOriginsList
 	public ResponseEntity<List<ReviewDTO>> getReviewsByProductCode(@PathVariable("productCode") String productCode) {
 		List<ReviewDTO> dtos = reviewService.findAllByProductCode(productCode);
@@ -34,6 +34,19 @@ public class ReviewAPI {
 		}
 		return ResponseEntity.status(200).body(Collections.emptyList());
 	}
+	
+	@GetMapping("/public/api/review/{productCode}/user")
+	@CrossOriginsList
+	public ResponseEntity<ReviewDTO> getReviewsByProductCodeAndUser(@PathVariable("productCode") String productCode) {
+
+		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+				.getUser().getId();
+		ReviewDTO dto = reviewService.findOneByProductCodeAndUserId(productCode, userId);
+		if (dto != null) {
+			return ResponseEntity.status(200).body(dto);
+		}
+		return ResponseEntity.status(500).body(new ReviewDTO());
+	}
 
 	@PostMapping("/api/review")
 	@CrossOriginsList
@@ -41,12 +54,15 @@ public class ReviewAPI {
 		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
 				.getUser().getId();
 		reviewDTO.setUserId(userId);
+		System.out.println("dto"+reviewDTO);
 		
-		ReviewDTO dto = reviewService.save(reviewDTO);
+		ReviewDTO dto = reviewService.createReview(reviewDTO);
+		
+		
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
 		}
-		return ResponseEntity.status(500).build();
+		return ResponseEntity.status(500).body(new ReviewDTO());
 	}
 
 	@PutMapping("/api/review")
@@ -56,7 +72,7 @@ public class ReviewAPI {
 				.getUser().getId();
 		reviewDTO.setUserId(userId);
 		
-		ReviewDTO dto = reviewService.save(reviewDTO);
+		ReviewDTO dto = reviewService.editReview(reviewDTO);
 		if (dto != null) {
 			return ResponseEntity.status(200).body(dto);
 		}

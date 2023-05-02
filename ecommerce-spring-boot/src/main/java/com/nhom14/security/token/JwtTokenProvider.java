@@ -16,7 +16,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 @Component
 public class JwtTokenProvider {
     // Đoạn JWT_SECRET này là bí mật, chỉ có phía server biết
-    private final String JWT_SECRET = "luanvan-springedu";
+    private final String JWT_SECRET = "nienluan-ecommerce";
 
     //Thời gian có hiệu lực của chuỗi jwt
     private final long JWT_EXPIRATION = 604800000L;
@@ -45,7 +45,6 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String authToken) {
-    	System.out.println("authToken: "+authToken);
         try {
             Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(authToken);
             return true;

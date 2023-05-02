@@ -30,9 +30,20 @@ public class DiscountEntity {
 
 	@Column
 	private Timestamp endTime;
+	
+	@Column(columnDefinition = "tinyint")
+	private Integer status;
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "discounts")
 	private List<ProductEntity> products;
+	
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
 	public Long getId() {
 		return id;

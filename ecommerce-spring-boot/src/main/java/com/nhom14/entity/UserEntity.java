@@ -37,7 +37,7 @@ public class UserEntity {
 	private String gender;
 
 	@Column
-	private int brithYear;
+	private Integer brithYear;
 
 	@Column(columnDefinition = "text")
 	private String avatar;
@@ -131,11 +131,11 @@ public class UserEntity {
 		this.gender = gender;
 	}
 
-	public int getBrithYear() {
+	public Integer getBrithYear() {
 		return brithYear;
 	}
 
-	public void setBrithYear(int brithYear) {
+	public void setBrithYear(Integer brithYear) {
 		this.brithYear = brithYear;
 	}
 

@@ -69,7 +69,8 @@ public class CategoryAPI {
 	@CrossOriginsList
 	public ResponseEntity<?> deleteCategory(@RequestBody CategoryDTO categoryDTO) {
 		categoryService.delete(categoryDTO);
-		return ResponseEntity.status(200).build();
+		
+		return ResponseEntity.status(200).body(new CategoryDTO());
 	}
 
 }

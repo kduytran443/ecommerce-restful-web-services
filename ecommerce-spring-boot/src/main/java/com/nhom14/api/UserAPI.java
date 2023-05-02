@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,6 +43,26 @@ public class UserAPI {
 			return ResponseEntity.status(200).body(dtos);
 		}
 		return ResponseEntity.status(500).body(Collections.emptyList());
+	}
+	
+	@PutMapping("/api/user")
+	@CrossOriginsList
+	public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO) {
+		Long userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+				.getUser().getId();
+		userDTO.setId(userId);
+		UserDTO dto = userService.save(userDTO);
+		if (dto != null) {
+			return ResponseEntity.status(200).body(dto);
+		}
+		return ResponseEntity.status(500).body(new UserDTO());
+	}
+
+	@PutMapping("/api/user/avatar")
+	@CrossOriginsList
+	public ResponseEntity<?> updateUserAvatar(@RequestBody UserDTO userDTO) {
+		userService.updateAvatar(userDTO.getAvatar());
+		return ResponseEntity.status(200).body(new UserDTO());
 	}
 	
 	@DeleteMapping("/api/user")

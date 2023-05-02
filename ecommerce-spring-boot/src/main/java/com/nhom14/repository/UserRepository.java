@@ -9,5 +9,6 @@ import com.nhom14.entity.UserEntity;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	
 	public UserEntity findOneByUsername(String username);
+	public UserEntity findOneByPhoneNumber(Integer phoneNumber);
 	
 }

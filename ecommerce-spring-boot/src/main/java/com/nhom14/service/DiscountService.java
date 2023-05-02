@@ -14,6 +14,8 @@ public interface DiscountService {
 
 	DiscountDTO findOneById(Long id);
 
+	DiscountDTO apply(DiscountDTO discountDTO, String productCode);
+	DiscountDTO remove(DiscountDTO discountDTO, String productCode);
 	DiscountDTO save(DiscountDTO discountDTO);
 
 	void delete(DiscountDTO discountDTO);

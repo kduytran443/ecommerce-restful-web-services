@@ -1,6 +1,7 @@
 package com.nhom14.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,8 @@ public class AddressServiceImpl implements AddressService {
 	public List<AddressDTO> findAllByUserId(Long userId) {
 		UserEntity userEntity = userRepository.findOne(userId);
 
-		List<AddressEntity> addressEntities = userEntity.getAddresses();
+		List<AddressEntity> addressEntities = userEntity.getAddresses().stream().filter(item -> item.getStatus() == 1)
+				.collect(Collectors.toList());
 
 		return addressConverter.toDTOList(addressEntities);
 	}
@@ -40,9 +42,7 @@ public class AddressServiceImpl implements AddressService {
 		AddressEntity addressEntity = null;
 
 		if (addressDTO.getId() != null) {
-			System.out.println("Sửa ");
 			addressEntity = addressRepository.findOne(addressDTO.getId());
-			System.out.println("addressEntity cũ: "+addressEntity.getDetails());
 			addressEntity = addressConverter.toEntity(addressDTO, addressEntity);
 		} else {
 			addressEntity = addressConverter.toEntity(addressDTO);
@@ -52,7 +52,6 @@ public class AddressServiceImpl implements AddressService {
 		}
 
 		if (addressEntity != null) {
-			System.out.println("Save ok!");
 			addressEntity = addressRepository.save(addressEntity);
 			return addressConverter.toDTO(addressEntity);
 		}
@@ -62,7 +61,9 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public void delete(AddressDTO addressDTO) {
-		addressRepository.delete(addressDTO.getId());
+		AddressEntity addressEntity = addressRepository.findOne(addressDTO.getId());
+		addressEntity.setStatus(0);
+		addressRepository.save(addressEntity);
 	}
 
 }

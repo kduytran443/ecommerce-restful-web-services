@@ -15,14 +15,15 @@ public class DiscountConverter
 	@Override
 	public DiscountDTO toDTO(DiscountEntity entity) {
 		DiscountDTO dto = new DiscountDTO();
-
+		
 		dto.setDiscountPercent(entity.getDiscountPercent());
 		dto.setEndTime(entity.getEndTime());
 		dto.setStartTime(entity.getStartTime());
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
 		dto.setStartTime(entity.getStartTime());
-
+		dto.setStatus(entity.getStatus());
+		
 		return dto;
 	}
 

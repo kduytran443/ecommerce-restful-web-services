@@ -9,6 +9,15 @@ public class ReviewDTO {
 	private String productCode;
 	private Timestamp date;
 	private Long userId;
+	private String avatar;
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
 
 	public Long getUserId() {
 		return userId;
@@ -57,4 +66,11 @@ public class ReviewDTO {
 	public void setDate(Timestamp date) {
 		this.date = date;
 	}
+
+	@Override
+	public String toString() {
+		return "ReviewDTO [username=" + username + ", content=" + content + ", rating=" + rating + ", productCode="
+				+ productCode + ", date=" + date + ", userId=" + userId + ", avatar=" + avatar + "]";
+	}
+
 }

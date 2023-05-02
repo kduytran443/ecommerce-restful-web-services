@@ -35,7 +35,7 @@ public class ReviewConverter implements IConverterToDTO<ReviewEntity, ReviewDTO>
 	@Override
 	public ReviewDTO toDTO(ReviewEntity entity) {
 		ReviewDTO dto = new ReviewDTO();
-		
+		dto.setAvatar(entity.getUser().getAvatar());
 		dto.setUserId(entity.getUser().getId());
 		dto.setContent(entity.getContent());
 		dto.setDate(entity.getDate());

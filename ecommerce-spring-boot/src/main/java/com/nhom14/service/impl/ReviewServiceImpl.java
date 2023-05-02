@@ -36,7 +36,7 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public List<ReviewDTO> findAllByProductCode(String productCode) {
 		ProductEntity productEntity = productRepository.findOneByCode(productCode);
-		List<ReviewEntity> reviewEntities = reviewRepository.findAllByProduct(productEntity);
+		List<ReviewEntity> reviewEntities = reviewRepository.findAllByProductOrderByDateDesc(productEntity);
 		return reviewConverter.toDTOList(reviewEntities);
 	}
 
@@ -45,42 +45,6 @@ public class ReviewServiceImpl implements ReviewService {
 		UserEntity userEntity = userRepository.findOne(id);
 		List<ReviewEntity> reviewEntities = reviewRepository.findAllByUser(userEntity);
 		return reviewConverter.toDTOList(reviewEntities);
-	}
-
-	@Override
-	public ReviewDTO save(ReviewDTO reviewDTO) {
-		ProductEntity productEntity = productRepository.findOneByCode(reviewDTO.getProductCode());
-		UserEntity userEntity = userRepository.findOneByUsername(reviewDTO.getUsername());
-
-		if (productEntity != null && userEntity != null) {
-			ReviewEntity reviewEntity = reviewRepository.findOneByProductAndUser(productEntity, userEntity);
-
-			if (reviewEntity != null) {
-				reviewEntity = reviewConverter.toEntity(reviewDTO, reviewEntity);
-			} else {
-				reviewEntity = reviewConverter.toEntity(reviewDTO);
-
-				reviewEntity.setUser(userEntity);
-				reviewEntity.setProduct(productEntity);
-
-				Date date = new Date();
-				reviewEntity.setDate(new Timestamp(date.getTime()));
-
-				ReviewId reviewId = new ReviewId();
-				reviewId.setProductId(productEntity.getId());
-				reviewId.setUserId(userEntity.getId());
-
-				reviewEntity.setReviewId(reviewId);
-			}
-
-			if (reviewEntity != null) {
-				reviewEntity = reviewRepository.save(reviewEntity);
-				return reviewConverter.toDTO(reviewEntity);
-			}
-
-		}
-
-		return null;
 	}
 
 	@Override
@@ -104,6 +68,72 @@ public class ReviewServiceImpl implements ReviewService {
 		}
 
 		return null;
+	}
+
+	@Override
+	public ReviewDTO findOneByProductCodeAndUserId(String productCode, Long userId) {
+		ProductEntity productEntity = productRepository.findOneByCode(productCode);
+		UserEntity userEntity = userRepository.findOne(userId);
+
+		if (productEntity != null && userEntity != null) {
+			ReviewEntity reviewEntity = reviewRepository.findOneByProductAndUser(productEntity, userEntity);
+			if (reviewEntity != null) {
+				return reviewConverter.toDTO(reviewEntity);
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public ReviewDTO editReview(ReviewDTO reviewDTO) {
+		ProductEntity productEntity = productRepository.findOneByCode(reviewDTO.getProductCode());
+		UserEntity userEntity = userRepository.findOne(reviewDTO.getUserId());
+
+		ReviewEntity reviewEntity = reviewRepository.findOneByProductAndUser(productEntity, userEntity);
+
+		if (reviewEntity != null) {
+			reviewEntity = new ReviewEntity();
+			reviewEntity.setContent(reviewDTO.getContent());
+			Date date = new Date();
+			reviewEntity.setDate(new Timestamp(date.getTime()));
+
+			ReviewId reviewId = new ReviewId();
+			reviewId.setProductId(productEntity.getId());
+			reviewId.setUserId(userEntity.getId());
+			reviewEntity.setReviewId(reviewId);
+			reviewEntity = reviewRepository.save(reviewEntity);
+			return reviewConverter.toDTO(reviewEntity);
+		}
+
+		return null;
+	}
+
+	@Override
+	public ReviewDTO createReview(ReviewDTO reviewDTO) {
+		ProductEntity productEntity = productRepository.findOneByCode(reviewDTO.getProductCode());
+		UserEntity userEntity = userRepository.findOne(reviewDTO.getUserId());
+		
+		ReviewEntity reviewEntity = reviewRepository.findOneByProductAndUser(productEntity, userEntity);
+
+		if (reviewEntity == null) {
+			reviewEntity = new ReviewEntity();
+		}
+
+		reviewEntity.setProduct(productEntity);
+		reviewEntity.setUser(userEntity);
+		reviewEntity.setContent(reviewDTO.getContent());
+		Date date = new Date();
+		reviewEntity.setDate(new Timestamp(date.getTime()));
+
+		reviewEntity.setRating(reviewDTO.getRating());
+		ReviewId reviewId = new ReviewId();
+		reviewId.setProductId(productEntity.getId());
+		reviewId.setUserId(userEntity.getId());
+		reviewEntity.setReviewId(reviewId);
+
+		reviewEntity = reviewRepository.save(reviewEntity);
+		return reviewConverter.toDTO(reviewEntity);
 	}
 
 }

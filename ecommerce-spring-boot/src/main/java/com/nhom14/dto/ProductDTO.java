@@ -23,6 +23,23 @@ public class ProductDTO {
 	private String content;
 	private Long revenue;
 	private Integer isFavorited;
+	private Integer remainingAmount;
+
+	public Integer getIsFavorited() {
+		return isFavorited;
+	}
+
+	public void setIsFavorited(Integer isFavorited) {
+		this.isFavorited = isFavorited;
+	}
+
+	public Integer getRemainingAmount() {
+		return remainingAmount;
+	}
+
+	public void setRemainingAmount(Integer remainingAmount) {
+		this.remainingAmount = remainingAmount;
+	}
 
 	public Long getRevenue() {
 		return revenue;

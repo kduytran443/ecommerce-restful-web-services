@@ -7,7 +7,7 @@ public class UserDTO {
 	private String email;
 	private int phoneNumber;
 	private String gender;
-	private int brithYear;
+	private Integer brithYear;
 	private String password;
 	private String role;
 	private String avatar;
@@ -97,11 +97,11 @@ public class UserDTO {
 		this.gender = gender;
 	}
 
-	public int getBrithYear() {
+	public Integer getBrithYear() {
 		return brithYear;
 	}
 
-	public void setBrithYear(int brithYear) {
+	public void setBrithYear(Integer brithYear) {
 		this.brithYear = brithYear;
 	}
 

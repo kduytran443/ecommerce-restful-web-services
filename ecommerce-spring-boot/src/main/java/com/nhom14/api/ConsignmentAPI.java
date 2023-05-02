@@ -54,6 +54,18 @@ public class ConsignmentAPI {
 
 		return ResponseEntity.status(500).body(new ConsignmentDTO());
 	}
+	
+	@GetMapping("/api/consignment/product/{productCode}")
+	@CrossOriginsList
+	public ResponseEntity<List<ConsignmentDTO>> getConsignmentByProductCode(@PathVariable("productCode") String productCode) {
+		List<ConsignmentDTO> dtos = consignmentService.findAllByProductCode(productCode);
+
+		if (dtos != null) {
+			return ResponseEntity.status(200).body(dtos);
+		}
+
+		return ResponseEntity.status(500).body(Collections.emptyList());
+	}
 
 	@PostMapping("/api/consignment")
 	@CrossOriginsList
